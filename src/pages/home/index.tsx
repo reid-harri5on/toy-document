@@ -6,7 +6,7 @@ export const Home = () => {
   return (
     <Container img={ImgHomeBack}>
       <Gradient />
-      <Layout>
+      <Layout page="home">
         <Frame>
           <Heading>Toy Document Labeling App</Heading>
           <SubHeading>
