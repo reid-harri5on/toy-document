@@ -8,25 +8,41 @@ import {
   Header,
   Logo,
   Label,
+  LogoBtn,
 } from "./styles";
 import ImgLogo from "../../assets/images/logo.png";
+import ImgHome from "../../assets/images/home.png";
+import ImgDocument from "../../assets/images/document.png";
+import { useNavigate } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
+  page: string;
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
-  const { children } = props;
+  const { children, page } = props;
+  const navigate = useNavigate();
+  const goHome = () => {
+    navigate("/");
+  };
+  const goDocuments = () => {
+    navigate("/documents");
+  };
   return (
     <Container>
       <Header>
-        <Frame>
-          <Logo img={ImgLogo} />
-          <Button>Toy Document Labeling</Button>
+        <Frame page={page}>
+          <Logo page={page} img={ImgLogo} />
+          <LogoBtn page={page}>Toy Document Labeling</LogoBtn>
         </Frame>
-        <Frame>
-          <Button>Home</Button>
-          <Button>Documents</Button>
+        <Frame page={page}>
+          <Button page={page} img={ImgHome} onClick={goHome}>
+            Home
+          </Button>
+          <Button page={page} img={ImgDocument} onClick={goDocuments}>
+            Documents
+          </Button>
         </Frame>
       </Header>
       <Body>{children}</Body>
