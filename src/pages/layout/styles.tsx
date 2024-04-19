@@ -20,8 +20,8 @@ export const Header = styled.div`
 export const Body = styled.div`
   align-items: center;
   display: flex;
-  max-height: 100%;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
   justify-content: center;
 `;
 
@@ -116,11 +116,11 @@ export const Frame = styled.div<{ page: string }>`
 
 export const Footer = styled.div`
   align-items: center;
+  bottom: 0px;
   display: flex;
   height: 50px;
   justify-content: center;
   position: absolute;
-  bottom: 0px;
   width: 100%;
 `;
 
