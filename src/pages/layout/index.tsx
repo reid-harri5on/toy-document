@@ -9,6 +9,7 @@ import {
   Logo,
   Label,
   LogoBtn,
+  NLP,
 } from "./styles";
 import ImgLogo from "../../assets/images/logo.png";
 import ImgHome from "../../assets/images/home.png";
@@ -23,24 +24,27 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { children, page } = props;
   const navigate = useNavigate();
-  const goHome = () => {
+  const onGoHome = () => {
     navigate("/");
   };
-  const goDocuments = () => {
+  const onGoDocuments = () => {
     navigate("/documents");
   };
   return (
     <Container>
       <Header>
-        <Frame page={page}>
-          <Logo page={page} img={ImgLogo} />
-          <LogoBtn page={page}>Toy Document Labeling</LogoBtn>
+        <Frame $page={page}>
+          <Logo $page={page} $img={ImgLogo} onClick={onGoHome} />
+          <LogoBtn $page={page} onClick={onGoHome}>
+            Toy Document Labeling
+          </LogoBtn>
         </Frame>
-        <Frame page={page}>
-          <Button page={page} img={ImgHome} onClick={goHome}>
+        {page === "documents" && <NLP>NLP</NLP>}
+        <Frame $page={page}>
+          <Button $page={page} $img={ImgHome} onClick={onGoHome}>
             Home
           </Button>
-          <Button page={page} img={ImgDocument} onClick={goDocuments}>
+          <Button $page={page} $img={ImgDocument} onClick={onGoDocuments}>
             Documents
           </Button>
         </Frame>

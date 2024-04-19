@@ -25,6 +25,7 @@ import {
   Label,
 } from "./styles";
 import React, { useEffect, useState } from "react";
+import { Modal } from "./modal";
 
 export interface DocData {
   id: number;
@@ -38,9 +39,10 @@ export const Documents = () => {
   const [labels, setLabels] = useState<string[][]>([]);
   const [value, setValue] = useState("");
   const [id, setId] = useState(0);
+  const [modal, showModal] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchJson = async () => {
       const response = await fetch(process.env.PUBLIC_URL + "mock.json");
       if (!response.ok) {
         throw new Error("Failed to retrieve file");
@@ -49,32 +51,26 @@ export const Documents = () => {
       setDocs(datas);
     };
 
-    fetchData();
+    fetchJson();
   }, []);
 
-  const goFirst = () => {
-    setId(1);
-  };
+  useEffect(() => {
+    if (labels.length === 0) {
+      const temp = docs.map((doc) => []);
+      setLabels(temp);
+    }
+  }, [docs, labels.length]);
 
-  const goPrev = () => {
+  const onGoPrev = () => {
     if (id > 1) setId(id - 1);
   };
 
-  const goNext = () => {
+  const onGoNext = () => {
     if (id < docs.length) setId(id + 1);
   };
 
-  const goLast = () => {
-    setId(docs.length);
-  };
-
   const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
-      if (labels.length === 0) {
-        docs.forEach(() => {
-          labels.push([]);
-        });
-      }
+    if (event.key === "Enter" && id > 0 && labels.length > 0) {
       labels[id - 1].push(value);
       setLabels(labels);
       setValue("");
@@ -85,12 +81,40 @@ export const Documents = () => {
     setValue(event.target.value);
   };
 
+  const onDelete = (index: number) => {
+    let temp = labels.map((arr) => [...arr]);
+    temp[id - 1].splice(index, 1);
+    setLabels(temp);
+  };
+
+  const onSave = () => {
+    if (id > 0 && labels.length > 0)
+      sessionStorage.setItem(`${id}`, labels[id - 1].join(","));
+  };
+
+  const onReset = () => {
+    if (id > 0 && labels.length > 0) {
+      const temp = labels.map((arr) => [...arr]);
+      const session = sessionStorage.getItem(`${id}`) || "";
+      temp[id - 1] = session.split(",");
+      setLabels(temp);
+    }
+  };
+
   return (
     <Layout page="documents">
+      {modal && (
+        <Modal
+          onHide={() => showModal(false)}
+          id={id}
+          setLabels={setLabels}
+          labels={labels}
+        />
+      )}
       <Container>
-        <Header>NLP</Header>
+        <Header />
         <Body>
-          <Titles selected={id > 0}>
+          <Titles $selected={id > 0}>
             {docs.map((data) => {
               return (
                 <TitleItm
@@ -104,20 +128,16 @@ export const Documents = () => {
               );
             })}
           </Titles>
-          <Editor selected={id > 0}>
+          <Editor $selected={id > 0}>
             <BackBtn onClick={() => setId(0)}>{">"}</BackBtn>
             <Frame>
               <Board>
-                <BoardNo>{id > 0 && `${id}/${docs.length} documents`}</BoardNo>
-                <BoardTitle>
-                  {id > 0 && `${docs[id - 1].title} documents`}
-                </BoardTitle>
-                <BoardBody>
-                  {id > 0 && `${docs[id - 1].body} documents`}
-                </BoardBody>
+                <BoardNo>{`${id}/${docs.length} documents`}</BoardNo>
+                <BoardTitle>{(id > 0 && docs[id - 1].title) || ""}</BoardTitle>
+                <BoardBody>{(id > 0 && docs[id - 1].body) || ""}</BoardBody>
                 <BoardSpace>
                   <BoardLink
-                    href={id > 0 ? docs[id - 1].url : ""}
+                    href={(id > 0 && docs[id - 1].url) || ""}
                     target="#blank"
                   >
                     Go to Acticle...
@@ -130,17 +150,9 @@ export const Documents = () => {
                       labels.length > 0 &&
                       labels[id - 1].map((label, index) => {
                         return (
-                          <Label key={"lable" + index}>
+                          <Label key={"label" + index}>
                             <div>{label}</div>
-                            <button
-                              onClick={() => {
-                                let temp = labels.map((arr) => [...arr]);
-                                temp[id - 1].splice(index, 1);
-                                setLabels(temp);
-                              }}
-                            >
-                              x
-                            </button>
+                            <button onClick={() => onDelete(index)}>x</button>
                           </Label>
                         );
                       })}
@@ -153,14 +165,14 @@ export const Documents = () => {
                 </BoardEdit>
               </Board>
               <Control>
-                <EditBtn onClick={goFirst}>First</EditBtn>
-                <EditBtn onClick={goPrev}>Prev</EditBtn>
-                <EditBtn onClick={goNext}>Next</EditBtn>
-                <EditBtn onClick={goLast}>Last</EditBtn>
+                <EditBtn onClick={() => setId(1)}>First</EditBtn>
+                <EditBtn onClick={onGoPrev}>Prev</EditBtn>
+                <EditBtn onClick={onGoNext}>Next</EditBtn>
+                <EditBtn onClick={() => setId(docs.length)}>Last</EditBtn>
                 <Split />
-                <EditBtn>Save</EditBtn>
-                <EditBtn>Reset</EditBtn>
-                <EditBtn>Suggest Label</EditBtn>
+                <EditBtn onClick={onSave}>Save</EditBtn>
+                <EditBtn onClick={onReset}>Reset</EditBtn>
+                <EditBtn onClick={() => showModal(true)}>Suggest Label</EditBtn>
               </Control>
             </Frame>
           </Editor>
