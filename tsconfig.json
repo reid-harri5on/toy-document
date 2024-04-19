@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "baseUrl": "src"
   },
-  "include": ["./src"]
+  "include": ["./src", "./src/assets/text/1.txt.d.ts"]
 }
