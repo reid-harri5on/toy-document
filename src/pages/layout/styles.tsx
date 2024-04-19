@@ -9,12 +9,12 @@ export const Container = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 1rem;
   justify-content: space-between;
   left: 2rem;
   position: absolute;
   right: 2rem;
-  top: 2rem;
+  align-items: center;
 `;
 
 export const Body = styled.div`
@@ -25,26 +25,33 @@ export const Body = styled.div`
   justify-content: center;
 `;
 
-export const Logo = styled.div<{ page: string; img: string }>`
-  background-image: url(${(props: { img: string }) => props.img});
+export const Logo = styled.button<{ $page: string; $img: string }>`
+  ${({ $img }) => $img && `background-image: url(${$img});`}
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  filter: brightness(
-    ${(props: { page: string }) => (props.page === "home" ? `100%` : `0%`)}
-  );
+  ${({ $page }) =>
+    $page &&
+    `filter: opacity(60%) brightness(${$page === "home" ? "100%" : "0%"});`}
+  border: none;
+  background-color: transparent;
   height: 74px;
   width: 36px;
+  cursor: pointer;
+  &:hover {
+    ${({ $page }) =>
+      $page &&
+      `filter: opacity(100%) brightness(${$page === "home" ? "100%" : "0%"});`}
+  }
 `;
 
-export const Button = styled.button<{ page: string; img: string }>`
+export const Button = styled.button<{ $page: string; $img: string }>`
   background-color: transparent;
   border: none;
   cursor: pointer;
-  filter: opacity(60%)
-    invert(
-      ${(props: { page: string }) => (props.page === "home" ? `100%` : `0%`)}
-    );
+  ${({ $page }) =>
+    $page &&
+    `filter: opacity(60%) invert(${$page === "home" ? "100%" : "0%"});`}
   font-size: 1.125rem;
   font-weight: 900;
   line-height: 100%;
@@ -53,18 +60,18 @@ export const Button = styled.button<{ page: string; img: string }>`
   padding: 1.75rem 0;
   transition: all 0.3s, color 0s, height 0s, background 0s;
   min-width: 36px;
+  min-height: 76px;
 
   &:hover {
-    filter: opacity(100%)
-      invert(
-        ${(props: { page: string }) => (props.page === "home" ? `100%` : `0%`)}
-      );
+    ${({ $page }) =>
+      $page &&
+      `filter: opacity(100%) invert(${$page === "home" ? "100%" : "0%"});`}
   }
 
   @media screen and (max-width: 690px) {
     color: transparent;
     font-size: 0;
-    background-image: url(${(props: { img: string }) => props.img});
+    ${({ $img }) => $img && `background-image: url(${$img});`}
     background-position: center;
     background-repeat: no-repeat;
     background-size: 36px 36px;
@@ -72,14 +79,14 @@ export const Button = styled.button<{ page: string; img: string }>`
   }
 `;
 
-export const LogoBtn = styled.button<{ page: string }>`
+export const LogoBtn = styled.button<{ $page: string }>`
   background-color: transparent;
   border: none;
   cursor: pointer;
-  filter: opacity(60%)
-    invert(
-      ${(props: { page: string }) => (props.page === "home" ? `100%` : `0%`)}
-    );
+  ${({ $page }) =>
+    $page &&
+    `filter: opacity(60%) invert(${$page === "home" ? "100%" : "0%"});`}
+
   font-size: 1.125rem;
   font-weight: 900;
   line-height: 100%;
@@ -89,27 +96,31 @@ export const LogoBtn = styled.button<{ page: string }>`
   white-space: nowrap;
 
   &:hover {
-    filter: opacity(100%)
-      invert(
-        ${(props: { page: string }) => (props.page === "home" ? `100%` : `0%`)}
-      );
+    ${({ $page }) =>
+      $page &&
+      `filter: opacity(100%) invert(${$page === "home" ? "100%" : "0%"});`}
   }
 
-  @media screen and (max-width: 690px) {
+  @media screen and (max-width: 960px) {
     color: transparent;
     font-size: 0;
     margin: 0;
   }
 `;
 
-export const Frame = styled.div<{ page: string }>`
+export const Frame = styled.div<{ $page: string }>`
   align-items: center;
-  background-color: ${(props: { page: string }) =>
-    props.page === "home" ? `rgba(0, 0, 0, 0.5)` : `rgb(255,255,255)`};
+  ${({ $page }) =>
+    $page &&
+    `background-color: ${$page === "home" ? "rgba(0, 0, 0, 0.5)" : "white"};
+    margin-top: ${$page === "home" ? "2rem" : "0"};
+    border: 1px solid ${
+      $page === "home" ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.7)"
+    };`}
   border-radius: 20px;
-  border: 1px solid
-    ${(props: { page: string }) =>
-      props.page === "home" ? `rgba(255, 255, 255, 0.7)` : `rgba(0,0,0,0.7)`};
+
+  ${({ $page }) => $page && ``}
+
   display: flex;
   padding: 0 1rem;
 `;
@@ -129,4 +140,17 @@ export const Label = styled.div`
   font-family: objektiv-mk1, sans-serif;
   font-size: 16px;
   line-height: 22px;
+`;
+
+export const NLP = styled.h1`
+  color: white;
+  filter: drop-shadow(black 5px 15px 15px);
+  font-family: "Brush Script MT";
+  /* font-size: clamp(3em, 18vw, 6rem); */
+  font-size: 5.8rem;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: 20px;
+  margin: 0 0 0 20px;
+  transition: all 0.3s;
 `;

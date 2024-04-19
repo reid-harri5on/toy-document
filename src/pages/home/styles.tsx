@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const Container = styled.div<{ img: string }>`
-  background-image: url(${(props: { img: string }) => props.img});
+export const Container = styled.div<{ $img: string }>`
+  ${({ $img }) => $img && `background-image: url(${$img});`}
   background-position: center;
   background-size: cover;
   height: 100%;

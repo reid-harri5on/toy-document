@@ -18,6 +18,7 @@ export const Header = styled.h1`
   font-weight: 900;
   letter-spacing: 40px;
   margin: 0;
+  height: 140px;
 `;
 
 export const Body = styled.div`
@@ -28,12 +29,11 @@ export const Body = styled.div`
   width: 100%;
 `;
 
-export const Titles = styled.div<{ selected: boolean }>`
+export const Titles = styled.div<{ $selected: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: ${(props: { selected: boolean }) =>
-    props.selected ? `60px` : `100%`};
+  ${({ $selected }) => `width: ${$selected ? "60px" : "100%"};`}
   max-height: calc(100% - 32px);
   overflow-x: hidden;
   overflow-y: auto;
@@ -83,15 +83,15 @@ export const TitleItm = styled.button`
   }
 `;
 
-export const Editor = styled.div<{ selected: boolean }>`
+export const Editor = styled.div<{ $selected: boolean }>`
   align-items: center;
   display: flex;
   flex: 1;
   gap: 16px;
   transition: all 0.3s;
-  width: ${(props: { selected: boolean }) => (props.selected ? `100%` : `0px`)};
-  padding: ${(props: { selected: boolean }) =>
-    props.selected ? `32px 32px 32px 0` : `0`};
+  ${({ $selected }) =>
+    `width: ${$selected ? "100%" : "0px"};
+    padding: ${$selected ? "32px 32px 32px 0px" : "0px"};`}
 `;
 
 export const BackBtn = styled.button`
@@ -127,6 +127,7 @@ export const Board = styled.div`
   max-width: 1000px;
   overflow: auto;
   flex: 1;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -186,7 +187,7 @@ export const BoardSpace = styled.div`
 
 export const Control = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 0.5rem;
   flex-wrap: wrap;
   width: 100%;
   max-width: 1064px;

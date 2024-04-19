@@ -4,7 +4,7 @@ import { Container, Gradient, Heading, SubHeading, Frame } from "./styles";
 
 export const Home = () => {
   return (
-    <Container img={ImgHomeBack}>
+    <Container $img={ImgHomeBack}>
       <Gradient />
       <Layout page="home">
         <Frame>
