@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ICON } from "assets";
 
 export const Container = styled.div`
   position: relative;
@@ -25,16 +26,13 @@ export const Body = styled.div`
   justify-content: center;
 `;
 
-export const Logo = styled.button<{ $page: string; $img: string }>`
-  ${({ $img }) => $img && `background-image: url(${$img});`}
-  background-position: center;
-  background-repeat: no-repeat;
+export const Logo = styled.button<{ $page: string }>`
+  background: url(${ICON.Logo}) no-repeat center transparent;
   background-size: contain;
   ${({ $page }) =>
     $page &&
     `filter: opacity(60%) brightness(${$page === "home" ? "100%" : "0%"});`}
   border: none;
-  background-color: transparent;
   height: 74px;
   width: 36px;
   cursor: pointer;
@@ -45,7 +43,7 @@ export const Logo = styled.button<{ $page: string; $img: string }>`
   }
 `;
 
-export const Button = styled.button<{ $page: string; $img: string }>`
+export const Button = styled.button<{ $page: string; $image: string }>`
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -71,7 +69,7 @@ export const Button = styled.button<{ $page: string; $img: string }>`
   @media screen and (max-width: 690px) {
     color: transparent;
     font-size: 0;
-    ${({ $img }) => $img && `background-image: url(${$img});`}
+    ${({ $image }) => $image && `background-image: url(${$image});`}
     background-position: center;
     background-repeat: no-repeat;
     background-size: 36px 36px;
@@ -101,11 +99,16 @@ export const LogoBtn = styled.button<{ $page: string }>`
       `filter: opacity(100%) invert(${$page === "home" ? "100%" : "0%"});`}
   }
 
-  @media screen and (max-width: 960px) {
-    color: transparent;
-    font-size: 0;
-    margin: 0;
-  }
+  ${({ $page }) =>
+    "@media screen and (max-width: " +
+    ($page === "home" ? "690px" : "960px") +
+    `
+      ) {
+        color: transparent;
+        font-size: 0;
+        margin: 0;
+      }
+    `}
 `;
 
 export const Frame = styled.div<{ $page: string }>`
@@ -146,11 +149,18 @@ export const NLP = styled.h1`
   color: white;
   filter: drop-shadow(black 5px 15px 15px);
   font-family: "Brush Script MT";
-  /* font-size: clamp(3em, 18vw, 6rem); */
   font-size: 5.8rem;
   font-style: italic;
   font-weight: 900;
   letter-spacing: 20px;
   margin: 0 0 0 20px;
-  transition: all 0.3s;
+  min-height: 140px;
+  transition: color 0.3s;
+  @media screen and (max-width: 560px) {
+    color: transparent;
+    font-size: 0;
+    letter-spacing: 0;
+    margin: 0;
+    transition: all 0s 0.3s, color 0.3s;
+  }
 `;

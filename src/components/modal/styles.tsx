@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { ICON } from "assets";
+import { COLOR } from "consts";
 
 export const Container = styled.div`
   backdrop-filter: brightness(80%) blur(2px);
@@ -43,6 +45,8 @@ export const Labels = styled.div`
   padding: 0.5rem;
   border: 2px rgb(60, 60, 60) solid;
   border-radius: 1rem;
+  align-content: flex-start;
+  width: 100%;
 `;
 
 export const Label = styled.button<{ $check: boolean }>`
@@ -53,6 +57,7 @@ export const Label = styled.button<{ $check: boolean }>`
   cursor: pointer;
   padding: 0.8rem 1.2rem;
   border-radius: 0.8rem;
+  height: max-content;
   border: none;
   &:hover {
     ${({ $check }) =>
@@ -86,16 +91,19 @@ export const Button = styled.button`
 export const CloseBtn = styled.button`
   color: white;
   cursor: pointer;
-  max-width: 20px;
-  max-height: 20px;
+  width: 20px;
+  height: 20px;
+  background: url(${ICON.Multiply}) no-repeat center;
+  background-size: 8px 8px;
+  filter: invert(1);
   border-radius: 50%;
   border: none;
-  background-color: rgb(60, 60, 60);
+  background-color: ${COLOR.Bright70};
   &:hover {
-    background-color: rgb(100, 100, 100);
+    background-color: ${COLOR.Bright60};
   }
   &:active {
-    background-color: rgb(140, 140, 140);
+    background-color: ${COLOR.Bright50};
   }
 
   transition: all 0.3s;

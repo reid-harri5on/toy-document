@@ -10,7 +10,67 @@ interface ModalProps {
   labels: string[][];
 }
 
-const mocks = ["cat", "dog", "elephant", "rabbit", "mouse"];
+const mocks = [
+  "giraffe",
+  "penguin",
+  "dolphin",
+  "lion",
+  "koala",
+  "panda",
+  "kangaroo",
+  "elephant",
+  "cheetah",
+  "chameleon",
+  "rhinoceros",
+  "flamingo",
+  "shark",
+  "owl",
+  "zebra",
+  "sloth",
+  "polar bear",
+  "peacock",
+  "squirrel",
+  "gorilla",
+  "otter",
+  "hedgehog",
+  "seahorse",
+  "meerkat",
+  "llama",
+  "moose",
+  "wombat",
+  "platypus",
+  "raccoon",
+  "armadillo",
+  "chinchilla",
+  "quokka",
+  "okapi",
+  "capybara",
+  "narwhal",
+  "kiwi",
+  "iguana",
+  "echidna",
+  "piranha",
+  "tarantula",
+  "opossum",
+  "anteater",
+  "gazelle",
+  "meerkat",
+  "pangolin",
+];
+
+const getRandomNames = () => {
+  const randomLength = Math.floor(Math.random() * 3) + 3; // Random length between 3 and 5
+  const randomIndices: string[] = [];
+
+  // Generate random indices within the range of the animalNames array
+  while (randomIndices.length < randomLength) {
+    const randomIndex = Math.floor(Math.random() * mocks.length);
+    if (!randomIndices.includes(mocks[randomIndex])) {
+      randomIndices.push(mocks[randomIndex]);
+    }
+  }
+  return randomIndices;
+};
 
 export const Modal: React.FC<ModalProps> = ({
   onHide,
@@ -18,9 +78,17 @@ export const Modal: React.FC<ModalProps> = ({
   labels,
   setLabels,
 }) => {
-  const [checks, setChecks] = useState<boolean[]>(mocks.map(() => true));
+  const tempNames = getRandomNames();
+  const [checks, setChecks] = useState<boolean[]>(tempNames.map(() => true));
+  const [names, setNames] = useState<string[]>(tempNames);
   const ref = useRef(null);
   useOutside(ref, onHide);
+
+  const onRegenerate = () => {
+    const tempNames = getRandomNames();
+    setChecks(tempNames.map(() => true));
+    setNames(tempNames);
+  };
 
   const onCheck = (index: number) => {
     const temp = checks.map((check) => check);
@@ -44,10 +112,10 @@ export const Modal: React.FC<ModalProps> = ({
       <Frame ref={ref}>
         <Heading>Suggested Labels</Heading>
         <Space />
-        <CloseBtn onClick={onHide}>x</CloseBtn>
+        <CloseBtn onClick={onHide}></CloseBtn>
         <SubHeading>Labels generated from the AI</SubHeading>
         <Labels>
-          {mocks.map((label, index) => {
+          {names.map((label, index) => {
             return (
               <Label
                 $check={checks[index]}
@@ -59,6 +127,7 @@ export const Modal: React.FC<ModalProps> = ({
             );
           })}
         </Labels>
+        <Button onClick={onRegenerate}>Regenerate</Button>
         <Space></Space>
         <Button onClick={onOK}>OK</Button>
         <Button onClick={onHide}>Cancel</Button>

@@ -1,10 +1,10 @@
 import { Layout } from "pages/layout";
-import ImgHomeBack from "../../assets/images/homeback.jpg";
+import { BG } from "assets";
 import { Container, Gradient, Heading, SubHeading, Frame } from "./styles";
 
 export const Home = () => {
   return (
-    <Container $img={ImgHomeBack}>
+    <Container $img={BG.Home}>
       <Gradient />
       <Layout page="home">
         <Frame>
@@ -14,6 +14,7 @@ export const Home = () => {
             machine learning models
           </SubHeading>
         </Frame>
+        <Gradient />
       </Layout>
     </Container>
   );

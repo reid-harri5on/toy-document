@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { COLOR } from "consts";
 
 export const Container = styled.div<{ $img: string }>`
   ${({ $img }) => $img && `background-image: url(${$img});`}
@@ -9,7 +10,7 @@ export const Container = styled.div<{ $img: string }>`
 `;
 
 export const Gradient = styled.div`
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0) 92%);
+  background-image: ${COLOR.Grad};
   bottom: 0px;
   height: 200px;
   position: absolute;
@@ -24,7 +25,7 @@ export const Frame = styled.div`
 `;
 
 export const Heading = styled.h1`
-  color: rgb(255, 255, 255);
+  color: white;
   display: block;
   font-family: objektiv-mk1, sans-serif;
   font-size: 3.5rem;
@@ -38,7 +39,7 @@ export const Heading = styled.h1`
 `;
 
 export const SubHeading = styled.h2`
-  color: rgb(255, 255, 255);
+  color: white;
   display: block;
   font-family: objektiv-mk1, sans-serif;
   font-size: 2.5rem;
