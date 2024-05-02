@@ -18,26 +18,23 @@ import {
   BoardBody,
   BoardLink,
   BoardSpace,
-  BoardEdit,
   BoardFrame,
-  BoardLabel,
-  Edit,
-  Label,
 } from "./styles";
-import React, { useEffect, useState } from "react";
-import { Modal } from "./modal";
+import { useEffect, useState } from "react";
+import { SuggestModal } from "../../components";
+import { MultiInput } from "components/multi_input";
 
-export interface DocData {
+export interface Docs {
   id: number;
   title: string;
   body: string;
   url: string;
+  labels: string[];
 }
 
 export const Documents = () => {
-  const [docs, setDocs] = useState<DocData[]>([]);
+  const [docs, setDocs] = useState<Docs[]>([]);
   const [labels, setLabels] = useState<string[][]>([]);
-  const [value, setValue] = useState("");
   const [id, setId] = useState(0);
   const [modal, showModal] = useState(false);
 
@@ -48,7 +45,11 @@ export const Documents = () => {
         throw new Error("Failed to retrieve file");
       }
       const datas = await response.json();
-      setDocs(datas);
+      let temp: Docs[] = datas;
+      temp.forEach((doc) => {
+        doc.labels = [];
+      });
+      setDocs(temp);
     };
 
     fetchJson();
@@ -69,42 +70,31 @@ export const Documents = () => {
     if (id < docs.length) setId(id + 1);
   };
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && id > 0 && labels.length > 0) {
-      labels[id - 1].push(value);
-      setLabels(labels);
-      setValue("");
-    }
-  };
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-  };
-
-  const onDelete = (index: number) => {
-    let temp = labels.map((arr) => [...arr]);
-    temp[id - 1].splice(index, 1);
-    setLabels(temp);
-  };
-
   const onSave = () => {
-    if (id > 0 && labels.length > 0)
-      sessionStorage.setItem(`${id}`, labels[id - 1].join(","));
+    if (id > 0 && labels.length > 0) {
+      sessionStorage.setItem(`${id}`, JSON.stringify(labels[id - 1]));
+      onGoNext();
+    }
   };
 
   const onReset = () => {
     if (id > 0 && labels.length > 0) {
-      const temp = labels.map((arr) => [...arr]);
-      const session = sessionStorage.getItem(`${id}`) || "";
-      temp[id - 1] = session.split(",");
-      setLabels(temp);
+      const text = sessionStorage.getItem(`${id}`) || "";
+      try {
+        const temp = JSON.parse(text) as string[];
+        if (temp !== undefined) {
+          let temps = labels.map((arr) => [...arr]);
+          temps[id - 1] = temp;
+          setLabels(temps);
+        }
+      } catch {}
     }
   };
 
   return (
     <Layout page="documents">
       {modal && (
-        <Modal
+        <SuggestModal
           onHide={() => showModal(false)}
           id={id}
           setLabels={setLabels}
@@ -132,37 +122,31 @@ export const Documents = () => {
             <BackBtn onClick={() => setId(0)}>{">"}</BackBtn>
             <Frame>
               <Board>
-                <BoardNo>{`${id}/${docs.length} documents`}</BoardNo>
-                <BoardTitle>{(id > 0 && docs[id - 1].title) || ""}</BoardTitle>
-                <BoardBody>{(id > 0 && docs[id - 1].body) || ""}</BoardBody>
-                <BoardSpace>
-                  <BoardLink
-                    href={(id > 0 && docs[id - 1].url) || ""}
-                    target="#blank"
-                  >
-                    Go to Acticle...
-                  </BoardLink>
-                </BoardSpace>
-                <BoardEdit>
-                  <BoardLabel>Label:</BoardLabel>
-                  <BoardFrame>
-                    {id > 0 &&
-                      labels.length > 0 &&
-                      labels[id - 1].map((label, index) => {
-                        return (
-                          <Label key={"label" + index}>
-                            <div>{label}</div>
-                            <button onClick={() => onDelete(index)}>x</button>
-                          </Label>
-                        );
-                      })}
-                    <Edit
-                      onKeyDown={onKeyDown}
-                      onChange={onChange}
-                      value={value}
-                    ></Edit>
-                  </BoardFrame>
-                </BoardEdit>
+                <BoardFrame>
+                  <BoardNo>{`${id}/${docs.length} documents`}</BoardNo>
+                  <BoardTitle>
+                    {(id > 0 && docs[id - 1].title) || ""}
+                  </BoardTitle>
+                  <BoardBody>{(id > 0 && docs[id - 1].body) || ""}</BoardBody>
+                  <BoardSpace>
+                    <BoardLink
+                      href={(id > 0 && docs[id - 1].url) || ""}
+                      target="#blank"
+                    >
+                      Go to Acticle...
+                    </BoardLink>
+                  </BoardSpace>
+                  {id > 0 && id <= labels.length && (
+                    <MultiInput
+                      labels={labels[id - 1]}
+                      setLabels={(arr) => {
+                        const temp = labels.map((label) => [...label]);
+                        temp[id - 1] = arr;
+                        setLabels(temp);
+                      }}
+                    />
+                  )}
+                </BoardFrame>
               </Board>
               <Control>
                 <EditBtn onClick={() => setId(1)}>First</EditBtn>

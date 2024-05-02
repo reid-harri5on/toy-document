@@ -1,20 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Home } from "./pages/home";
-import { Documents } from "./pages/document";
+import { HomePage, DocumentsPage } from "./pages";
 import { Container } from "styles";
+import { PATH } from "consts";
 
-function App() {
+export const App = () => {
   return (
     <Container>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/documents" element={<Documents />} />
+          <Route path={PATH.Home} element={<HomePage />} />
+          <Route path={PATH.Document} element={<DocumentsPage />} />
         </Routes>
       </BrowserRouter>
     </Container>
   );
-}
-
-export default App;
+};

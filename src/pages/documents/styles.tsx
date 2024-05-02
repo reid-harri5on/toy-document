@@ -1,8 +1,9 @@
 import styled, { keyframes } from "styled-components";
+import { COLOR } from "consts";
 
 export const Container = styled.div`
   align-items: center;
-  background-color: hsl(0, 0%, 15%);
+  background-color: ${COLOR.Bright20};
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -36,23 +37,23 @@ export const Titles = styled.div<{ $selected: boolean }>`
   ${({ $selected }) => `width: ${$selected ? "60px" : "100%"};`}
   max-height: calc(100% - 32px);
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 16px;
   transition: all 0.3s;
   &::-webkit-scrollbar {
     width: 8px;
-    background-color: hsl(0, 0%, 80%);
+    background-color: ${COLOR.Bright60};
   }
   &::-webkit-scrollbar-thumb {
-    background-color: hsl(0, 0%, 40%);
+    background-color: ${COLOR.Bright30};
   }
 `;
 
 export const TitleItm = styled.button`
   align-items: center;
-  background-color: hsl(0, 0%, 25%);
+  background-color: ${COLOR.Bright20};
   border-radius: 16px;
-  border: 2px solid hsl(0, 0%, 25%);
+  border: 2px solid ${COLOR.Bright20};
   color: white;
   cursor: pointer;
   display: flex;
@@ -61,19 +62,19 @@ export const TitleItm = styled.button`
   white-space: nowrap;
   width: 100%;
   &:hover {
-    background-color: hsl(0, 0%, 50%);
+    background-color: ${COLOR.Bright50};
   }
   &:active {
-    background-color: hsl(0, 0%, 100%);
-    color: hsl(0, 0%, 10%);
+    background-color: white;
+    color: ${COLOR.Bright10};
   }
   &:disabled {
-    background-color: hsl(0, 0%, 100%);
-    color: hsl(0, 0%, 10%);
+    background-color: white;
+    color: ${COLOR.Bright10};
   }
   #id {
     font-size: 1.75rem;
-    width: 48px;
+    min-width: 48px;
     font-weight: 700;
   }
   #title {
@@ -87,17 +88,16 @@ export const Editor = styled.div<{ $selected: boolean }>`
   align-items: center;
   display: flex;
   flex: 1;
-  gap: 16px;
-  transition: all 0.3s;
-  ${({ $selected }) =>
-    `width: ${$selected ? "100%" : "0px"};
-    padding: ${$selected ? "32px 32px 32px 0px" : "0px"};`}
+  gap: 1rem;
+  overflow: hidden;
+  width: max-content;
+  ${({ $selected }) => `padding: ${$selected ? "32px 32px 32px 0px" : "0px"}; `}
 `;
 
 export const BackBtn = styled.button`
   border: none;
   border-radius: 0 50% 50% 0;
-  background-color: hsl(0, 0%, 25%);
+  background-color: ${COLOR.Bright20};
   color: white;
   cursor: pointer;
   font-size: 1.75rem;
@@ -105,10 +105,10 @@ export const BackBtn = styled.button`
   padding: 0.5rem;
   transition: all 0.3s;
   &:hover {
-    background-color: hsl(0, 0%, 50%);
+    background-color: ${COLOR.Bright50};
   }
   &:active {
-    background-color: hsl(0, 0%, 75%);
+    background-color: ${COLOR.Bright60};
   }
 `;
 
@@ -122,25 +122,34 @@ export const Frame = styled.div`
 `;
 
 export const Board = styled.div`
-  background-color: hsl(0, 0%, 25%);
-  border-radius: 16px;
+  background-color: ${COLOR.Bright20};
   max-width: 1000px;
-  overflow: auto;
   flex: 1;
-  position: relative;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  color: white;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  border-radius: 1rem;
+`;
+
+export const BoardFrame = styled.div`
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   align-items: center;
-  padding: 2rem;
-  color: white;
+  position: relative;
+  flex: 1;
+  padding: 1rem;
+  overflow-y: scroll;
   &::-webkit-scrollbar {
-    background-color: transparent;
-    width: 8px;
+    background-color: ${COLOR.Bright30};
+    width: 0.4rem;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: hsl(0, 0%, 40%);
-  }
-  &::-webkit-overflow-scrolling {
+    background-color: ${COLOR.Bright50};
   }
 `;
 
@@ -153,9 +162,9 @@ export const BoardTitle = styled.h1`
 export const BoardBody = styled.p``;
 
 const breatheAnimation = keyframes`
- 0% { top: 10px }
- 50% { top: 5px }
- 100% { top: 10px }
+  0% { top: 10px }
+  50% { top: 5px }
+  100% { top: 10px }
 `;
 
 export const BoardLink = styled.a`
@@ -213,7 +222,11 @@ export const EditBtn = styled.button`
 `;
 
 export const Split = styled.div`
-  flex: 1;
+  flex: 100;
+  @media screen and (max-width: 880px) {
+    flex: 0;
+    display: none;
+  }
 `;
 
 export const Footer = styled.div`
@@ -231,23 +244,14 @@ export const BoardEdit = styled.div`
 
 export const BoardLabel = styled.div``;
 
-export const BoardFrame = styled.div`
-  border-radius: 16px;
-  border: 2px white solid;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px;
-  width: 100%;
-`;
-
 export const Edit = styled.input`
   outline: none;
   padding: 6px 10px;
   border-radius: 8px;
   border: none;
   font-size: 1rem;
-  width: 120px;
+  max-width: 120px;
+  width: 100%;
 `;
 
 export const Label = styled.div`
