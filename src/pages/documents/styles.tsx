@@ -30,60 +30,6 @@ export const Body = styled.div`
   width: 100%;
 `;
 
-export const Titles = styled.div<{ $selected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  ${({ $selected }) => `width: ${$selected ? "60px" : "100%"};`}
-  max-height: calc(100% - 32px);
-  overflow-x: hidden;
-  overflow-y: scroll;
-  padding: 16px;
-  transition: all 0.3s;
-  &::-webkit-scrollbar {
-    width: 8px;
-    background-color: ${COLOR.Bright60};
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${COLOR.Bright30};
-  }
-`;
-
-export const TitleItm = styled.button`
-  align-items: center;
-  background-color: ${COLOR.Bright20};
-  border-radius: 16px;
-  border: 2px solid ${COLOR.Bright20};
-  color: white;
-  cursor: pointer;
-  display: flex;
-  padding: 8px 0;
-  transition: all 0.3s;
-  white-space: nowrap;
-  width: 100%;
-  &:hover {
-    background-color: ${COLOR.Bright50};
-  }
-  &:active {
-    background-color: white;
-    color: ${COLOR.Bright10};
-  }
-  &:disabled {
-    background-color: white;
-    color: ${COLOR.Bright10};
-  }
-  #id {
-    font-size: 1.75rem;
-    min-width: 48px;
-    font-weight: 700;
-  }
-  #title {
-    font-size: 1.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
-
 export const Editor = styled.div<{ $selected: boolean }>`
   align-items: center;
   display: flex;
@@ -200,25 +146,6 @@ export const Control = styled.div`
   flex-wrap: wrap;
   width: 100%;
   max-width: 1064px;
-`;
-
-export const EditBtn = styled.button`
-  border: none;
-  border-radius: 16px;
-  background-color: hsl(0, 0%, 25%);
-  color: white;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-family: "DM Sans";
-  height: 40px;
-  padding: 0 20px;
-  transition: all 0.3s;
-  &:hover {
-    background-color: hsl(0, 0%, 50%);
-  }
-  &:active {
-    background-color: hsl(0, 0%, 75%);
-  }
 `;
 
 export const Split = styled.div`

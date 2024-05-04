@@ -60,7 +60,3 @@ export const LabelInput = styled.input`
   box-sizing: border-box;
   height: 2rem;
 `;
-
-export const Spacer = styled.div`
-  flex: 100;
-`;

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { LabelItem, Container, LabelInput, Spacer } from "./styles";
+import { LabelItem, Container, LabelInput } from "./styles";
+import { Spacer } from "../";
 
 interface MultiInputProps {
   labels: string[];
