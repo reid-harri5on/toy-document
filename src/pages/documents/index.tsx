@@ -3,15 +3,12 @@ import {
   Container,
   Header,
   Body,
-  Titles,
   Editor,
   Footer,
-  TitleItm,
   BackBtn,
   Frame,
   Board,
   Control,
-  EditBtn,
   Split,
   BoardNo,
   BoardTitle,
@@ -20,17 +17,10 @@ import {
   BoardSpace,
   BoardFrame,
 } from "./styles";
+import { Docs } from "model";
 import { useEffect, useState } from "react";
-import { SuggestModal } from "../../components";
-import { MultiInput } from "components/multi_input";
-
-export interface Docs {
-  id: number;
-  title: string;
-  body: string;
-  url: string;
-  labels: string[];
-}
+import { SuggestModal, TitleList, MultiInput } from "components";
+import { NormalButton } from "components";
 
 export const Documents = () => {
   const [docs, setDocs] = useState<Docs[]>([]);
@@ -39,25 +29,32 @@ export const Documents = () => {
   const [modal, showModal] = useState(false);
 
   useEffect(() => {
-    const fetchJson = async () => {
-      const response = await fetch(process.env.PUBLIC_URL + "mock.json");
+    const fetchAndUpdateDocs = async () => {
+      const response = await fetch(`${process.env.PUBLIC_URL}/mock.json`);
       if (!response.ok) {
-        throw new Error("Failed to retrieve file");
+        console.error("Failed to retrieve file");
+        return;
       }
-      const datas = await response.json();
-      let temp: Docs[] = datas;
-      temp.forEach((doc) => {
-        doc.labels = [];
+
+      const fetchedDocs: Docs[] = await response.json();
+      const updatedDocs = fetchedDocs.map((doc) => ({
+        ...doc,
+        labels: [],
+      }));
+
+      updatedDocs.forEach((doc) => {
+        localStorage.setItem(`${doc.id}`, JSON.stringify(doc));
       });
-      setDocs(temp);
+
+      setDocs(updatedDocs.slice(0, 15));
     };
 
-    fetchJson();
+    fetchAndUpdateDocs();
   }, []);
 
   useEffect(() => {
     if (labels.length === 0) {
-      const temp = docs.map((doc) => []);
+      const temp = docs.map(() => []);
       setLabels(temp);
     }
   }, [docs, labels.length]);
@@ -95,8 +92,8 @@ export const Documents = () => {
     <Layout page="documents">
       {modal && (
         <SuggestModal
-          onHide={() => showModal(false)}
-          id={id}
+          handleClose={() => showModal(false)}
+          titleIndex={id}
           setLabels={setLabels}
           labels={labels}
         />
@@ -104,20 +101,13 @@ export const Documents = () => {
       <Container>
         <Header />
         <Body>
-          <Titles $selected={id > 0}>
-            {docs.map((data) => {
-              return (
-                <TitleItm
-                  key={data.id}
-                  disabled={data.id + 1 === id}
-                  onClick={() => setId(data.id + 1)}
-                >
-                  <div id="id">{data.id + 1}</div>
-                  {id === 0 && <div id="title">{data.title}</div>}
-                </TitleItm>
-              );
-            })}
-          </Titles>
+          <TitleList
+            selectedIndex={id}
+            documents={docs}
+            isExpanded={id > 0}
+            setSelectedIndex={setId}
+            setDocuments={setDocs}
+          />
           <Editor $selected={id > 0}>
             <BackBtn onClick={() => setId(0)}>{">"}</BackBtn>
             <Frame>
@@ -149,14 +139,18 @@ export const Documents = () => {
                 </BoardFrame>
               </Board>
               <Control>
-                <EditBtn onClick={() => setId(1)}>First</EditBtn>
-                <EditBtn onClick={onGoPrev}>Prev</EditBtn>
-                <EditBtn onClick={onGoNext}>Next</EditBtn>
-                <EditBtn onClick={() => setId(docs.length)}>Last</EditBtn>
+                <NormalButton onClick={() => setId(1)}>First</NormalButton>
+                <NormalButton onClick={onGoPrev}>Prev</NormalButton>
+                <NormalButton onClick={onGoNext}>Next</NormalButton>
+                <NormalButton onClick={() => setId(docs.length)}>
+                  Last
+                </NormalButton>
                 <Split />
-                <EditBtn onClick={onSave}>Save</EditBtn>
-                <EditBtn onClick={onReset}>Reset</EditBtn>
-                <EditBtn onClick={() => showModal(true)}>Suggest Label</EditBtn>
+                <NormalButton onClick={onSave}>Save</NormalButton>
+                <NormalButton onClick={onReset}>Reset</NormalButton>
+                <NormalButton onClick={() => showModal(true)}>
+                  Suggest Label
+                </NormalButton>
               </Control>
             </Frame>
           </Editor>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { ICON } from "assets";
 import { COLOR } from "consts";
 
-export const Container = styled.div`
+export const Container = styled.div<{ $visabled: boolean }>`
   backdrop-filter: brightness(80%) blur(2px);
   bottom: 0;
   left: 0;
@@ -13,13 +13,15 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.5s ease-in-out;
+  ${({ $visabled }) => `opacity: ${$visabled ? 1 : 0};`}
 `;
 
 export const Frame = styled.div`
   background-color: white;
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 5px 5px 15px;
+  box-shadow: 0.25rem 0.25rem 1rem;
   gap: 1rem 0.5rem;
   display: flex;
   flex-wrap: wrap;
@@ -38,7 +40,7 @@ export const SubHeading = styled.p`
   margin: 0;
 `;
 
-export const Labels = styled.div`
+export const Group = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -49,26 +51,27 @@ export const Labels = styled.div`
   width: 100%;
 `;
 
-export const Label = styled.button<{ $check: boolean }>`
+export const CheckButton = styled.button<{ $check: boolean }>`
   ${({ $check }) =>
-    `background-color: ${$check ? "rgb(60,60,60)" : "rgb(180, 180, 180)"};`}
+    `background-color: ${$check ? COLOR.Bright20 : COLOR.Bright70};`}
 
   color: white;
   cursor: pointer;
+  flex: max-content;
   padding: 0.8rem 1.2rem;
   border-radius: 0.8rem;
   height: max-content;
   border: none;
   &:hover {
     ${({ $check }) =>
-      `background-color: ${$check ? "rgb(80,80,80)" : "rgb(160, 160, 160)"};`}
+      `background-color: ${$check ? COLOR.Bright30 : COLOR.Bright60};`}
   }
   &:active {
     ${({ $check }) =>
-      `background-color: ${$check ? "rgb(180,180,180)" : "rgb(60, 60, 60)"};`}
+      `background-color: ${$check ? COLOR.Bright70 : COLOR.Bright20};`}
   }
 
-  transition: all 0.3s;
+  transition: color 0.3s, background-color 0.3s;
 `;
 
 export const Button = styled.button`
@@ -85,10 +88,10 @@ export const Button = styled.button`
     background-color: rgb(140, 140, 140);
   }
 
-  transition: all 0.3s;
+  transition: color 0.3s, background-color 0.3s;
 `;
 
-export const CloseBtn = styled.button`
+export const CloseButton = styled.button`
   color: white;
   cursor: pointer;
   width: 20px;
@@ -106,7 +109,7 @@ export const CloseBtn = styled.button`
     background-color: ${COLOR.Bright50};
   }
 
-  transition: all 0.3s;
+  transition: color 0.3s, background-color 0.3s;
 `;
 
 export const Space = styled.div`
