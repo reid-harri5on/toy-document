@@ -2,8 +2,7 @@ import { Docs as Documents } from "model";
 import { Container, TitleItem } from "./styles";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "../";
-
-const maxCount = 30;
+import { MAXCOUNT, SCROLLCOUNT, TIME } from "consts";
 
 interface TitleListProps {
   selectedIndex: number;
@@ -11,14 +10,16 @@ interface TitleListProps {
   documents: Documents[];
   setSelectedIndex: (index: number) => void;
   setDocuments: (documents: Documents[]) => void;
+  setIsExpanded: (isExpanded: boolean) => void;
 }
 
 export const TitleList: React.FC<TitleListProps> = ({
   selectedIndex,
   documents,
+  isExpanded,
   setDocuments,
   setSelectedIndex,
-  isExpanded,
+  setIsExpanded,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,24 +39,24 @@ export const TitleList: React.FC<TitleListProps> = ({
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
     if (scrollHeight - scrollTop === clientHeight && !isLoading) {
-      if (documents.length < maxCount) {
+      if (documents.length < MAXCOUNT) {
         setIsLoading(true);
         setTimeout(() => {
           const lastIndex = documents.length;
-          const newDocument: Documents[] = [...documents];
+          const newDocs: Documents[] = [...documents];
 
-          for (let i = 0; i < 4; i++) {
+          for (let i = 0; i < SCROLLCOUNT; i++) {
             const index = lastIndex + i;
             const jsonData = localStorage.getItem(`${index}`);
             if (jsonData) {
               const document = JSON.parse(jsonData) as Documents;
-              newDocument.push(document);
+              newDocs.push(document);
             }
           }
 
-          setDocuments(newDocument);
+          setDocuments(newDocs);
           setIsLoading(false);
-        }, 3000);
+        }, TIME.LOADING_SUGGEST);
       }
     }
   };
@@ -70,8 +71,11 @@ export const TitleList: React.FC<TitleListProps> = ({
         return (
           <TitleItem
             key={"title-" + document.id}
-            disabled={document.id + 1 === selectedIndex}
-            onClick={() => setSelectedIndex(document.id + 1)}
+            disabled={document.id === selectedIndex}
+            onClick={() => {
+              setSelectedIndex(document.id);
+              setIsExpanded(true);
+            }}
           >
             <div id="id">{document.id + 1}</div>
             <div id="title">{document.title}</div>
