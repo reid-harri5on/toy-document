@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ICON } from "assets";
-import { COLOR } from "consts";
+import { COLOR, TIME } from "consts";
 
 export const Container = styled.div<{ $visabled: boolean }>`
   backdrop-filter: brightness(80%) blur(2px);
@@ -13,7 +13,7 @@ export const Container = styled.div<{ $visabled: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity ${TIME.TRANSITION} ease-in-out;
   ${({ $visabled }) => `opacity: ${$visabled ? 1 : 0};`}
 `;
 
@@ -25,7 +25,7 @@ export const Frame = styled.div`
   gap: 1rem 0.5rem;
   display: flex;
   flex-wrap: wrap;
-  width: 300px;
+  width: 19rem;
 `;
 
 export const Heading = styled.h1`
@@ -71,7 +71,7 @@ export const CheckButton = styled.button<{ $check: boolean }>`
       `background-color: ${$check ? COLOR.Bright70 : COLOR.Bright20};`}
   }
 
-  transition: color 0.3s, background-color 0.3s;
+  transition: background-color ${TIME.TRANSITION};
 `;
 
 export const Button = styled.button`
@@ -88,7 +88,7 @@ export const Button = styled.button`
     background-color: rgb(140, 140, 140);
   }
 
-  transition: color 0.3s, background-color 0.3s;
+  transition: background-color ${TIME.TRANSITION};
 `;
 
 export const CloseButton = styled.button`
@@ -109,7 +109,7 @@ export const CloseButton = styled.button`
     background-color: ${COLOR.Bright50};
   }
 
-  transition: color 0.3s, background-color 0.3s;
+  transition: background-color ${TIME.TRANSITION};
 `;
 
 export const Space = styled.div`

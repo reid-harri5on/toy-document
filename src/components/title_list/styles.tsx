@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLOR } from "consts";
+import { COLOR, TIME } from "consts";
 
 export const Container = styled.div<{ $expanded: boolean }>`
   box-sizing: border-box;
@@ -11,7 +11,7 @@ export const Container = styled.div<{ $expanded: boolean }>`
   gap: 1rem;
   overflow: hidden auto;
   padding: 1rem;
-  transition: width 0.5s;
+  transition: width ${TIME.TRANSITION};
 
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -33,7 +33,7 @@ export const TitleItem = styled.button`
   cursor: pointer;
   display: flex;
   padding: 0.5rem 0;
-  transition: color 0.5s, background 0.5s;
+  transition: color ${TIME.TRANSITION}, background-color ${TIME.TRANSITION};
   white-space: nowrap;
   width: 100%;
   &:hover {

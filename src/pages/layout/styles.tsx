@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ICON } from "assets";
+import { TIME } from "consts";
 
 export const Container = styled.div`
   position: relative;
@@ -56,7 +57,7 @@ export const Button = styled.button<{ $page: string; $image: string }>`
   margin: 0 1rem;
   outline: none;
   padding: 1.75rem 0;
-  transition: all 0.3s, color 0s, height 0s, background 0s;
+  transition: all ${TIME.TRANSITION}, color 0s, height 0s, background 0s;
   min-width: 36px;
   min-height: 76px;
 
@@ -90,7 +91,7 @@ export const LogoBtn = styled.button<{ $page: string }>`
   line-height: 100%;
   margin: 0 1rem;
   padding: 1.75rem 0;
-  transition: all 0.3s, color 0s;
+  transition: all ${TIME.TRANSITION}, color 0s;
   white-space: nowrap;
 
   &:hover {
@@ -155,12 +156,12 @@ export const NLP = styled.h1`
   letter-spacing: 20px;
   margin: 0 0 0 20px;
   min-height: 140px;
-  transition: color 0.3s;
+  transition: color ${TIME.TRANSITION};
   @media screen and (max-width: 560px) {
     color: transparent;
     font-size: 0;
     letter-spacing: 0;
     margin: 0;
-    transition: all 0s 0.3s, color 0.3s;
+    transition: all 0s ${TIME.TRANSITION}, color ${TIME.TRANSITION};
   }
 `;

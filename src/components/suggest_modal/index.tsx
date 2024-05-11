@@ -3,6 +3,7 @@ import { Frame, Heading, Group, SubHeading } from "./styles";
 import { useOutside } from "hooks/useOutside";
 import { useRef, useState, useEffect } from "react";
 import { Spinner, Spacer } from "../";
+import { TIME } from "consts";
 
 const animals = [
   "giraffe",
@@ -53,10 +54,9 @@ const animals = [
 ];
 
 interface SuggestModalProps {
-  titleIndex: number;
   handleClose: () => void;
-  setLabels: (labels: string[][]) => void;
-  labels: string[][];
+  setLabels: (labels: string[]) => void;
+  labels: string[];
 }
 
 const getRandomLabels = () => {
@@ -74,7 +74,7 @@ const getRandomLabels = () => {
 };
 
 export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
-  const { handleClose, titleIndex, labels, setLabels } = props;
+  const { handleClose, labels, setLabels } = props;
   const [labelStates, setLabelStates] = useState<boolean[]>([]);
   const [suggestedLabels, setSuggestedLabels] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,7 +84,7 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
     setIsVisible(false);
     setTimeout(() => {
       handleClose();
-    }, 500);
+    }, TIME.LOADING_MODAL);
   });
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
       setLabelStates(randomLabels.map(() => true));
       setSuggestedLabels(randomLabels);
       setIsLoading(false);
-    }, 1500);
+    }, TIME.LOADING_SUGGEST + TIME.LOADING_MODAL);
 
     return () => {};
   }, []);
@@ -109,7 +109,7 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
       setLabelStates(randomSuggests.map(() => true));
       setSuggestedLabels(randomSuggests);
       setIsLoading(false);
-    }, 1000);
+    }, TIME.LOADING_SUGGEST);
   };
 
   const handleCheck = (index: number) => {
@@ -119,15 +119,18 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
   };
 
   const handleComplete = () => {
-    if (titleIndex > 0 && labels.length > 0) {
-      const newLabels = labels.map((label) => [...label]);
-      const checkedLabels = suggestedLabels.filter(
-        (suggestedLabel, index) => labelStates[index]
-      );
-      newLabels[titleIndex - 1] = checkedLabels;
-      setLabels(newLabels);
-    }
-    handleClose();
+    const checkedLabels = suggestedLabels.filter(
+      (suggestedLabel, index) => labelStates[index]
+    );
+    const newLabels = [...labels, ...checkedLabels];
+    setLabels(newLabels);
+    setIsVisible(false);
+    setTimeout(handleClose, TIME.LOADING_MODAL);
+  };
+
+  const handleCancel = () => {
+    setTimeout(handleClose, TIME.LOADING_MODAL);
+    setIsVisible(false);
   };
 
   return (
@@ -135,7 +138,7 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
       <Frame ref={ref}>
         <Heading>Suggested Labels</Heading>
         <Spacer />
-        <CloseButton onClick={handleClose}></CloseButton>
+        <CloseButton onClick={handleCancel}></CloseButton>
         <SubHeading>Labels generated from the AI</SubHeading>
         <Group>
           {suggestedLabels.map((label, index) => {
@@ -155,7 +158,7 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
         <Button onClick={handleRegenerate}>Regenerate</Button>
         <Spacer />
         <Button onClick={handleComplete}>OK</Button>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
       </Frame>
     </Container>
   );

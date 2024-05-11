@@ -1,4 +1,5 @@
 // Black and White
+export const Bright05 = "#0C0C0C"; // 5%
 export const Bright10 = "#1A1A1A"; // 10%
 export const Bright20 = "#333333"; // 20%
 export const Bright30 = "#4D4D4D"; // 30%
