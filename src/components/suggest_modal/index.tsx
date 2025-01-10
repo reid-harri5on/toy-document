@@ -1,9 +1,11 @@
 import { CheckButton, Container, CloseButton, Button } from "./styles";
 import { Frame, Heading, Group, SubHeading } from "./styles";
 import { useOutside } from "hooks/useOutside";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { Spinner, Spacer } from "../";
 import { TIME } from "consts";
+import { States } from "model";
+import { Context } from "hooks/contexts";
 
 const animals = [
   "giraffe",
@@ -54,9 +56,7 @@ const animals = [
 ];
 
 interface SuggestModalProps {
-  handleClose: () => void;
-  setLabels: (labels: string[]) => void;
-  labels: string[];
+  setStates: (states: Partial<States>) => void;
 }
 
 const getRandomLabels = () => {
@@ -73,28 +73,36 @@ const getRandomLabels = () => {
   return randomIndices;
 };
 
-export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
-  const { handleClose, labels, setLabels } = props;
+export const SuggestModal: React.FC<SuggestModalProps> = ({ setStates }) => {
+  const { documents, selectedIndex } = useContext(Context);
+  const document = documents[selectedIndex];
   const [labelStates, setLabelStates] = useState<boolean[]>([]);
   const [suggestedLabels, setSuggestedLabels] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
+
+  const handleLoad = async () => {
+    setTimeout(() => {
+      const randomLabels = getRandomLabels();
+      setLabelStates(randomLabels.map(() => true));
+      setSuggestedLabels(randomLabels);
+      setIsLoading(false);
+    }, TIME.LOADING_SUGGEST);
+  };
+
   useOutside(ref, () => {
     setIsVisible(false);
     setTimeout(() => {
-      handleClose();
+      setStates({ showSuggestModal: false });
     }, TIME.LOADING_MODAL);
   });
 
   useEffect(() => {
     setIsVisible(true);
     setTimeout(() => {
-      const randomLabels = getRandomLabels();
-      setLabelStates(randomLabels.map(() => true));
-      setSuggestedLabels(randomLabels);
-      setIsLoading(false);
-    }, TIME.LOADING_SUGGEST + TIME.LOADING_MODAL);
+      handleLoad();
+    }, TIME.LOADING_MODAL);
 
     return () => {};
   }, []);
@@ -104,12 +112,7 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
     setSuggestedLabels([]);
     setIsLoading(true);
 
-    setTimeout(() => {
-      const randomSuggests = getRandomLabels();
-      setLabelStates(randomSuggests.map(() => true));
-      setSuggestedLabels(randomSuggests);
-      setIsLoading(false);
-    }, TIME.LOADING_SUGGEST);
+    handleLoad();
   };
 
   const handleCheck = (index: number) => {
@@ -120,17 +123,26 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
 
   const handleComplete = () => {
     const checkedLabels = suggestedLabels.filter(
-      (suggestedLabel, index) => labelStates[index]
+      (suggestedLabel, index) =>
+        labelStates[index] && !document.labels.includes(suggestedLabel)
     );
-    const newLabels = [...labels, ...checkedLabels];
-    setLabels(newLabels);
+    const newLabels = [...document.labels, ...checkedLabels];
+    const newDocs = [...documents];
+    newDocs[selectedIndex] = { ...document, labels: newLabels };
+    setStates({ documents: newDocs });
     setIsVisible(false);
-    setTimeout(handleClose, TIME.LOADING_MODAL);
+    setTimeout(
+      () => setStates({ showSuggestModal: false }),
+      TIME.LOADING_MODAL
+    );
   };
 
   const handleCancel = () => {
-    setTimeout(handleClose, TIME.LOADING_MODAL);
     setIsVisible(false);
+    setTimeout(
+      () => setStates({ showSuggestModal: false }),
+      TIME.LOADING_MODAL
+    );
   };
 
   return (
@@ -152,7 +164,6 @@ export const SuggestModal: React.FC<SuggestModalProps> = (props) => {
               </CheckButton>
             );
           })}
-          {!isLoading && <Spacer />}
           {isLoading && <Spinner />}
         </Group>
         <Button onClick={handleRegenerate}>Regenerate</Button>

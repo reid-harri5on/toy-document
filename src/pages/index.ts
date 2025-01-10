@@ -1,3 +1,3 @@
-export { Home as HomePage } from "./home";
-export { Documents as DocumentsPage } from "./documents";
+export { HomePage } from "./home";
+export { DocumentPage } from "./documents";
 export * from "./layout";

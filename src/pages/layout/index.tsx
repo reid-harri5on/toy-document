@@ -4,11 +4,11 @@ import {
   Button,
   Container,
   Footer,
-  Frame,
+  Group,
   Header,
-  Logo,
+  LogoIcon,
   Label,
-  LogoBtn,
+  LogoButton,
   NLP,
 } from "./styles";
 import { ICON } from "assets";
@@ -24,35 +24,39 @@ export const Layout: React.FC<LayoutProps> = (props) => {
 
   const navigate = useNavigate();
 
-  const onGoHome = () => {
+  const handleToHome = () => {
     navigate("/");
   };
 
-  const onGoDocuments = () => {
+  const handleToDocument = () => {
     navigate("/documents");
   };
 
   return (
     <Container>
-      <Header>
-        <Frame $page={page}>
-          <Logo $page={page} onClick={onGoHome} />
-          <LogoBtn $page={page} onClick={onGoHome}>
+      <Header $page={page}>
+        <Group $page={page}>
+          <LogoIcon $page={page} onClick={handleToHome} />
+          <LogoButton $page={page} onClick={handleToHome}>
             Toy Document Labeling
-          </LogoBtn>
-        </Frame>
+          </LogoButton>
+        </Group>
         {page === "documents" && <NLP>NLP</NLP>}
-        <Frame $page={page}>
-          <Button $page={page} $image={ICON.Home} onClick={onGoHome}>
+        <Group $page={page}>
+          <Button $page={page} $image={ICON.Home} onClick={handleToHome}>
             Home
           </Button>
-          <Button $page={page} $image={ICON.Document} onClick={onGoDocuments}>
+          <Button
+            $page={page}
+            $image={ICON.Document}
+            onClick={handleToDocument}
+          >
             Documents
           </Button>
-        </Frame>
+        </Group>
       </Header>
       <Body>{children}</Body>
-      <Footer>
+      <Footer $page={page}>
         <Label>Copyright © 2024</Label>
       </Footer>
     </Container>

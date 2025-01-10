@@ -1,33 +1,41 @@
 import { LabelItem, Container, LabelInput } from "./styles";
 import { Spacer } from "../";
+import { Context } from "hooks/contexts";
+import { useContext } from "react";
+import { States } from "model";
 
 interface MultiInputProps {
-  labels: string[];
-  setLabels: (labels: string[]) => void;
-  inputLabel: string;
-  setInputLabel: (label: string) => void;
+  setStates: (states: Partial<States>) => void;
 }
 
-export const MultiInput: React.FC<MultiInputProps> = (props) => {
-  const { labels, setLabels, inputLabel, setInputLabel } = props;
+export const MultiInput: React.FC<MultiInputProps> = ({
+  setStates: updateStates,
+}) => {
+  const { selectedIndex, inputLabel, documents } = useContext(Context);
+  const document = documents[selectedIndex];
+  const labels = document.labels;
+
+  const setLabels = (newLabels: string[]) => {};
 
   const handleItemClick = (index: number) => {
-    const tempLabels = [...labels];
-    tempLabels.splice(index, 1);
-    setLabels(tempLabels);
+    const newLabels = [...labels];
+    newLabels.splice(index, 1);
+    setLabels(newLabels);
   };
 
   const handleInputKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && inputLabel !== "") {
-      const tempLabels = [...labels];
-      tempLabels.push(inputLabel);
-      setLabels(tempLabels);
-      setInputLabel("");
+      if (!labels.includes(inputLabel)) {
+        const newLabels = [...labels];
+        newLabels.push(inputLabel);
+        setLabels(newLabels);
+        updateStates({ inputLabel: "" });
+      }
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputLabel(event.target.value);
+    updateStates({ inputLabel: event.target.value });
   };
 
   return (

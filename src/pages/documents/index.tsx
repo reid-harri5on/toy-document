@@ -1,14 +1,19 @@
 import { Layout } from "../";
-import { Container, Header, Body, Footer } from "./styles";
-import { Docs } from "model";
-import { useEffect, useState } from "react";
+import { Container, Body } from "./styles";
+import { Documents, States } from "model";
+import { useContext, useEffect } from "react";
 import { TitleList } from "components";
-import { DocumentsView } from "views";
+import { DocumentView } from "views";
+import { useParams } from "react-router-dom";
+import { Context } from "hooks/contexts";
 
-export const Documents = () => {
-  const [documents, setDocuments] = useState<Docs[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [isExpanded, setIsExpanded] = useState(false);
+interface DocumentPageProps {
+  setStates: (states: Partial<States>) => void;
+}
+
+export const DocumentPage: React.FC<DocumentPageProps> = ({ setStates }) => {
+  const params = useParams();
+  const { selectedIndex, documents } = useContext(Context);
 
   useEffect(() => {
     const fetchAndUpdateDocs = async () => {
@@ -18,56 +23,34 @@ export const Documents = () => {
         return;
       }
 
-      const fetchedDocs: Docs[] = await response.json();
+      const fetchedDocs: Documents[] = await response.json();
+
       const updatedDocs = fetchedDocs.map((doc) => {
-        const newDoc = doc;
-        newDoc.labels = [];
-        return newDoc;
+        const jsonData = localStorage.getItem(`${doc.id}`);
+        const existingDoc = JSON.parse(jsonData || "{}") as Documents;
+        if (existingDoc.id === undefined) {
+          localStorage.setItem(`${doc.id}`, JSON.stringify(doc));
+          return doc;
+        }
+        return existingDoc;
       });
 
-      updatedDocs.forEach((doc) => {
-        localStorage.setItem(`${doc.id}`, JSON.stringify(doc));
-      });
-
-      setDocuments(updatedDocs.slice(0, 15));
+      setStates({ documents: updatedDocs.slice(0, 15) });
     };
 
     fetchAndUpdateDocs();
-  }, []);
-
-  const setLabels = (labels: string[]) => {
-    const newDocs = [...documents];
-    newDocs[selectedIndex].labels = labels;
-    setDocuments(newDocs);
-  };
+    setStates({ selectedIndex: Number(params.id || "-1") });
+  }, [params.id]);
 
   return (
     <Layout page="documents">
       <Container>
-        <Header />
         <Body>
-          <TitleList
-            selectedIndex={selectedIndex}
-            documents={documents}
-            isExpanded={isExpanded}
-            setSelectedIndex={setSelectedIndex}
-            setDocuments={setDocuments}
-            setIsExpanded={setIsExpanded}
-          />
-          {selectedIndex >= 0 && (
-            <DocumentsView
-              setIsExpanded={setIsExpanded}
-              setSelectedIndex={setSelectedIndex}
-              selectedIndex={selectedIndex}
-              lastIndex={documents.length}
-              labels={documents[selectedIndex].labels}
-              isExpanded={isExpanded}
-              document={documents[selectedIndex]}
-              setLabels={setLabels}
-            />
+          <TitleList setStates={setStates} />
+          {selectedIndex >= 0 && documents.length > 0 && (
+            <DocumentView setStates={setStates} />
           )}
         </Body>
-        <Footer />
       </Container>
     </Layout>
   );

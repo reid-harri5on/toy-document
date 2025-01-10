@@ -35,7 +35,7 @@ export const Frame = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 2rem;
   align-items: center;
 `;
 

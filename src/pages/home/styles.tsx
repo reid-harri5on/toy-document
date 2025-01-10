@@ -24,7 +24,7 @@ export const Frame = styled.div`
   margin: 0 120px;
 `;
 
-export const Heading = styled.h1`
+export const Title = styled.h1`
   color: white;
   display: block;
   font-family: objektiv-mk1, sans-serif;
@@ -38,7 +38,7 @@ export const Heading = styled.h1`
   text-align: center;
 `;
 
-export const SubHeading = styled.h2`
+export const SutTitle = styled.h2`
   color: white;
   display: block;
   font-family: objektiv-mk1, sans-serif;

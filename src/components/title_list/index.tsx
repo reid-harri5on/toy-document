@@ -1,28 +1,21 @@
-import { Docs as Documents } from "model";
+import { Documents } from "model";
 import { Container, TitleItem } from "./styles";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Spinner } from "../";
-import { MAXCOUNT, SCROLLCOUNT, TIME } from "consts";
+import { MAXCOUNT, PATH, SCROLLCOUNT, TIME } from "consts";
+import { States } from "model";
+import { Context } from "hooks/contexts";
+import { useNavigate } from "react-router-dom";
 
 interface TitleListProps {
-  selectedIndex: number;
-  isExpanded: boolean;
-  documents: Documents[];
-  setSelectedIndex: (index: number) => void;
-  setDocuments: (documents: Documents[]) => void;
-  setIsExpanded: (isExpanded: boolean) => void;
+  setStates: (states: Partial<States>) => void;
 }
 
-export const TitleList: React.FC<TitleListProps> = ({
-  selectedIndex,
-  documents,
-  isExpanded,
-  setDocuments,
-  setSelectedIndex,
-  setIsExpanded,
-}) => {
+export const TitleList: React.FC<TitleListProps> = ({ setStates }) => {
+  const { documents, isExpanded, selectedIndex } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const element = containerRef.current;
@@ -54,7 +47,7 @@ export const TitleList: React.FC<TitleListProps> = ({
             }
           }
 
-          setDocuments(newDocs);
+          setStates({ documents: newDocs });
           setIsLoading(false);
         }, TIME.LOADING_SUGGEST);
       }
@@ -73,8 +66,8 @@ export const TitleList: React.FC<TitleListProps> = ({
             key={"title-" + document.id}
             disabled={document.id === selectedIndex}
             onClick={() => {
-              setSelectedIndex(document.id);
-              setIsExpanded(true);
+              navigate(PATH.Document + document.id);
+              setStates({ isExpanded: true });
             }}
           >
             <div id="id">{document.id + 1}</div>
