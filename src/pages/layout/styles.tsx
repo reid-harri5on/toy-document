@@ -1,33 +1,40 @@
 import styled from "styled-components";
 import { ICON } from "assets";
-import { TIME } from "consts";
+import { TIME, COLOR } from "consts";
 
 export const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
   backdrop-filter: blur(5px) brightness(70%);
+  display: flex;
+  flex-direction: column;
 `;
 
-export const Header = styled.div`
+export const Header = styled.div<{ $page: string }>`
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  left: 2rem;
-  position: absolute;
-  right: 2rem;
   align-items: center;
+  height: 8.75rem;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 2rem;
+  ${({ $page }) =>
+    $page &&
+    `background-color: ${$page === "home" ? "transparent" : COLOR.Bright20};`}
 `;
 
 export const Body = styled.div`
   align-items: center;
   display: flex;
   width: 100%;
-  height: 100%;
+  flex: 1;
   justify-content: center;
+  overflow: hidden;
 `;
 
-export const Logo = styled.button<{ $page: string }>`
+export const LogoIcon = styled.button<{ $page: string }>`
   background: url(${ICON.Logo}) no-repeat center transparent;
   background-size: contain;
   ${({ $page }) =>
@@ -78,7 +85,7 @@ export const Button = styled.button<{ $page: string; $image: string }>`
   }
 `;
 
-export const LogoBtn = styled.button<{ $page: string }>`
+export const LogoButton = styled.button<{ $page: string }>`
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -112,12 +119,11 @@ export const LogoBtn = styled.button<{ $page: string }>`
     `}
 `;
 
-export const Frame = styled.div<{ $page: string }>`
+export const Group = styled.div<{ $page: string }>`
   align-items: center;
   ${({ $page }) =>
     $page &&
     `background-color: ${$page === "home" ? "rgba(0, 0, 0, 0.5)" : "white"};
-    margin-top: ${$page === "home" ? "2rem" : "0"};
     border: 1px solid ${
       $page === "home" ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.7)"
     };`}
@@ -129,14 +135,17 @@ export const Frame = styled.div<{ $page: string }>`
   padding: 0 1rem;
 `;
 
-export const Footer = styled.div`
+export const Footer = styled.div<{ $page: string }>`
   align-items: center;
   bottom: 0px;
   display: flex;
   height: 50px;
   justify-content: center;
-  position: absolute;
   width: 100%;
+  ${({ $page }) =>
+    $page &&
+    `background-color: ${$page === "home" ? "transparent" : COLOR.Bright05};`}
+  z-index: 1;
 `;
 
 export const Label = styled.div`
@@ -155,7 +164,6 @@ export const NLP = styled.h1`
   font-weight: 900;
   letter-spacing: 20px;
   margin: 0 0 0 20px;
-  min-height: 140px;
   transition: color ${TIME.TRANSITION};
   @media screen and (max-width: 560px) {
     color: transparent;

@@ -22,58 +22,24 @@ export const Frame = styled.div`
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0.25rem 0.25rem 1rem;
-  gap: 1rem 0.5rem;
+  width: 16rem;
   display: flex;
   flex-wrap: wrap;
-  width: 20rem;
+  gap: 1rem 0.5rem;
 `;
 
 export const Heading = styled.h1`
   color: black;
   font-size: 1.5rem;
   margin: 0 1rem;
+  text-align: center;
 `;
 
 export const SubHeading = styled.p`
   color: black;
   font-size: 1rem;
   margin: 0;
-`;
-
-export const Group = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  border: 2px rgb(60, 60, 60) solid;
-  border-radius: 1rem;
   width: 100%;
-  height: 5.5rem;
-  align-content: flex-start;
-`;
-
-export const CheckButton = styled.button<{ $check: boolean }>`
-  ${({ $check }) =>
-    `background-color: ${$check ? COLOR.Bright20 : COLOR.Bright70};`}
-
-  max-width: 50%;
-  color: white;
-  cursor: pointer;
-  flex: max-content;
-  padding: 0.8rem 1.2rem;
-  border-radius: 0.8rem;
-  box-sizing: border-box;
-  border: none;
-  &:hover {
-    ${({ $check }) =>
-      `background-color: ${$check ? COLOR.Bright30 : COLOR.Bright60};`}
-  }
-  &:active {
-    ${({ $check }) =>
-      `background-color: ${$check ? COLOR.Bright70 : COLOR.Bright20};`}
-  }
-
-  transition: background-color ${TIME.TRANSITION};
 `;
 
 export const Button = styled.button`
@@ -96,10 +62,10 @@ export const Button = styled.button`
 export const CloseButton = styled.button`
   color: white;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  min-width: 1.25rem;
+  height: 1.25rem;
   background: url(${ICON.Multiply}) no-repeat center;
-  background-size: 8px 8px;
+  background-size: 0.5rem 0.5rem;
   filter: invert(1);
   border-radius: 50%;
   border: none;
@@ -112,8 +78,4 @@ export const CloseButton = styled.button`
   }
 
   transition: background-color ${TIME.TRANSITION};
-`;
-
-export const Space = styled.div`
-  flex: 1;
 `;

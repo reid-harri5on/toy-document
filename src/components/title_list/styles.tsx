@@ -15,11 +15,17 @@ export const Container = styled.div<{ $expanded: boolean }>`
 
   &::-webkit-scrollbar {
     width: 0.5rem;
-    background-color: ${COLOR.Bright70};
+    background-color: ${COLOR.Bright60};
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${COLOR.Bright40};
+    background-color: ${COLOR.Bright30};
+    &:hover {
+      background-color: ${COLOR.Bright20};
+    }
+    &:active {
+      background-color: ${COLOR.Bright10};
+    }
   }
 `;
 

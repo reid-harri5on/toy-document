@@ -1,1 +1,1 @@
-export { Documents as DocumentsView } from "./documents";
+export { DocumentView } from "./documents";

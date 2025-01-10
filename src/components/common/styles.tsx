@@ -6,6 +6,7 @@ export const Spinner = styled.div`
   background-size: 3.75rem 3.75rem;
   width: 100%;
   min-height: 2.5rem;
+  height: 100%;
 `;
 
 export const Spacer = styled.div`
