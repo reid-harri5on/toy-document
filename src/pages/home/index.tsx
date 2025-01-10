@@ -1,18 +1,17 @@
 import { Layout } from "pages/layout";
 import { BG } from "assets";
-import { Container, Gradient, Heading, SubHeading, Frame } from "./styles";
+import { Container, Gradient, Title, SutTitle, Frame } from "./styles";
 
-export const Home = () => {
+export const HomePage = () => {
   return (
     <Container $img={BG.Home}>
-      <Gradient />
       <Layout page="home">
         <Frame>
-          <Heading>Toy Document Labeling App</Heading>
-          <SubHeading>
+          <Title>Toy Document Labeling App</Title>
+          <SutTitle>
             Tool that enables humans to create training sets for NLP-based
             machine learning models
-          </SubHeading>
+          </SutTitle>
         </Frame>
         <Gradient />
       </Layout>
