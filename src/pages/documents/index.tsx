@@ -35,7 +35,7 @@ export const DocumentPage: React.FC<DocumentPageProps> = ({ setStates }) => {
         return existingDoc;
       });
 
-      setStates({ documents: updatedDocs.slice(0, 15) });
+      setStates({ documents: updatedDocs });
     };
 
     fetchAndUpdateDocs();
